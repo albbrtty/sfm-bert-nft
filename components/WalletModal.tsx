@@ -244,6 +244,7 @@ const WalletModal = ({
                                     key={name}
                                     loadingText={"Connecting"}
                                     onClick={() => {
+                                        console.log(`${name} activated`);
                                         setActivatingConnector(
                                             currentConnector
                                         );
@@ -268,7 +269,6 @@ const WalletModal = ({
                                                 );
                                             }
                                         });
-                                        onClose();
                                     }}
                                 >
                                     {React.createElement(

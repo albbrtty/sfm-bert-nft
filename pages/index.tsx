@@ -229,6 +229,8 @@ const Home: NextPage = () => {
                         <Link
                             textColor={"blue.400"}
                             textDecoration={"underline"}
+                            isExternal
+                            href={"https://bertbert.finance"}
                         >
                             bertbert
                         </Link>{" "}

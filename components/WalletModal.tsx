@@ -268,6 +268,7 @@ const WalletModal = ({
                                                     "Please switch to the Binance Smart Chain"
                                                 );
                                             }
+                                            console.log(error);
                                         });
                                     }}
                                 >

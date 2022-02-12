@@ -17,8 +17,10 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Bg from "../public/bg.jpg";
 import Web3Modal from "web3modal";
-import ethers from "ethers";
-import WalletModal from "../components/WalletModal";
+import { providers } from "ethers";
+const WalletModal = dynamic(() => import("../components/WalletModal"), {
+    ssr: false,
+});
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useCallback, useEffect, useState } from "react";
@@ -32,7 +34,7 @@ import { metaMask, hooks as metamaskHooks } from "../connectors/metamask";
 import { getPriorityConnector, Web3ReactHooks } from "@web3-react/core";
 import dynamic from "next/dynamic";
 export function getLibrary(provider: any) {
-    return new ethers.providers.Web3Provider(provider);
+    return new providers.Web3Provider(provider);
 }
 const Home: React.FC = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();

@@ -18,7 +18,9 @@ import styles from "../styles/Home.module.css";
 import Bg from "../public/bg.jpg";
 import Web3Modal from "web3modal";
 import ethers from "ethers";
-import WalletModal from "../components/WalletModal";
+const WalletModal = dynamic(() => import("../components/WalletModal"), {
+    ssr: false,
+});
 
 import { Web3Provider } from "@ethersproject/providers";
 import { useCallback, useEffect, useState } from "react";

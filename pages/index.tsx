@@ -30,10 +30,11 @@ import { CopyIcon } from "@chakra-ui/icons";
 import { walletConnect, hooks } from "../connectors/walletConnect";
 import { metaMask, hooks as metamaskHooks } from "../connectors/metamask";
 import { getPriorityConnector, Web3ReactHooks } from "@web3-react/core";
+import dynamic from "next/dynamic";
 export function getLibrary(provider: any) {
     return new ethers.providers.Web3Provider(provider);
 }
-const Home: NextPage = () => {
+const Home: React.FC = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const priority = getPriorityConnector(
         [metaMask, metamaskHooks],
@@ -278,5 +279,10 @@ const Home: NextPage = () => {
         </Flex>
     );
 };
-
-export default Home;
+const D = dynamic(
+    async () => {
+        return { default: Home };
+    },
+    { ssr: false }
+);
+export default D;

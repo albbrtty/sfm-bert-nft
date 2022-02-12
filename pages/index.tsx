@@ -238,22 +238,22 @@ const Home: NextPage = () => {
                         Contract address:{" "}
                         <Code> 0x01541172283a8ceff0d68b387b445bc2755f2a3f</Code>{" "}
                     </Text>
-                    <Box my={2} bg={"whiteAlpha.100"} p={4}>
-                        <Heading mb={2}>
-                            {nftBalance > 0
-                                ? "Your Inventory"
-                                : `You don't own any NFTS`}
-                        </Heading>
-                        <SimpleGrid
-                            maxH={"fit-content"}
-                            borderRadius={16}
-                            columns={{ base: 2, lg: 4 }}
-                            gap={2}
-                        >
-                            {/* @ts-ignore */}
-                            {nftDisplay}
-                        </SimpleGrid>
-                    </Box>
+                    {nftBalance > 0 ? (
+                        <Box my={2} bg={"whiteAlpha.100"} p={4}>
+                            <Heading mb={2}>Your Inventory</Heading>
+                            <SimpleGrid
+                                maxH={"fit-content"}
+                                borderRadius={16}
+                                columns={{ base: 2, lg: 4 }}
+                                gap={2}
+                            >
+                                {/* @ts-ignore */}
+                                {nftDisplay}
+                            </SimpleGrid>
+                        </Box>
+                    ) : (
+                        0
+                    )}
 
                     <Text>
                         <sub>Created by albert — a 12 year old!</sub>

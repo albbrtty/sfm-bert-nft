@@ -10,11 +10,9 @@ import {
     ButtonProps,
     ModalCloseButton,
     ModalFooter,
-    Box,
-    Img,
 } from "@chakra-ui/react";
 import React, { ReactChild, ReactChildren, useEffect, useState } from "react";
-import { Web3Provider } from "@ethersproject/providers";
+
 import {
     InjectedConnector,
     NoEthereumProviderError,
@@ -25,6 +23,7 @@ import {
     UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
 } from "@web3-react/walletconnect-connector";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
 const BSC = "https://bsc-dataseed.binance.org/";
 
 export const injected = new InjectedConnector({ supportedChainIds: [56] });
@@ -122,48 +121,7 @@ enum ConnectorNames {
     Injected = "Metamask",
     WalletConnect = "WalletConnect",
 }
-const ConnectorComponents: { [key: string]: React.ElementType<any> } = {
-    Metamask: () => {
-        return (
-            <Flex
-                w={"100%"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-            >
-                <Text>Metamask</Text>
-                <Img
-                    alt={"metamask icon"}
-                    w={8}
-                    src="https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png"
-                />
-            </Flex>
-        );
-    },
-    Injected: () => {
-        return (
-            <Flex w={"100%"} justifyContent={"space-between"}>
-                <Text alignSelf={"flex-start"}>Injected</Text>
-            </Flex>
-        );
-    },
-    WalletConnect: () => {
-        return (
-            <Flex
-                w={"100%"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-            >
-                <Text>WalletConnect </Text>
-                <Img
-                    alt={"metamask icon"}
-                    borderRadius={360}
-                    w={8}
-                    src="https://is4-ssl.mzstatic.com/image/thumb/Purple114/v4/31/7c/d0/317cd0a1-e7a9-5433-3da9-120432003ef2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1024x1024bb.png"
-                />
-            </Flex>
-        );
-    },
-};
+
 const connectorByName: { [name in ConnectorNames]: any } = {
     [ConnectorNames.Injected]: injected,
     [ConnectorNames.WalletConnect]: WalletConnect,
@@ -218,17 +176,15 @@ const WalletModal = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent bg={"#1b1b1b"} maxWidth={{ base: "75%", lg: "20%" }}>
+            <ModalContent bg={"#15141a"} maxWidth={{ base: "75%", lg: "20%" }}>
                 <ModalHeader fontWeight={400} letterSpacing={"wider"}>
-                    <Text textColor={"#FFF"}> Connect a wallet</Text>
-
+                    <Text color={"white"}>Connect a wallet</Text>
                     <Flex flexDir={"column"}>
                         {Object.keys(connectorByName).map((name) => {
                             const currentConnector =
                                 connectorByName[
                                     name as keyof typeof connectorByName
                                 ];
-                            console.log(name);
                             const activating =
                                 currentConnector === activatingConnector;
                             const connected = currentConnector === connector;
@@ -244,7 +200,6 @@ const WalletModal = ({
                                     key={name}
                                     loadingText={"Connecting"}
                                     onClick={() => {
-                                        console.log(`${name} activated`);
                                         setActivatingConnector(
                                             currentConnector
                                         );
@@ -268,21 +223,20 @@ const WalletModal = ({
                                                     "Please switch to the Binance Smart Chain"
                                                 );
                                             }
-                                            console.log(error);
+                                            console.error(error);
                                         });
+                                        onClose();
                                     }}
                                 >
-                                    {React.createElement(
-                                        ConnectorComponents[name],
-                                        {},
-                                        {}
-                                    )}
+                                    <Text width={"100%"} align={"left"}>
+                                        {name}
+                                    </Text>
                                 </WalletButton>
                             );
                         })}
                         <Button
-                            bg={"red.400"}
-                            my={2}
+                            mt={1}
+                            bg={"red.600"}
                             _hover={{ bg: "" }}
                             onClick={() => {
                                 deactivate();
@@ -293,8 +247,7 @@ const WalletModal = ({
                         </Button>
                     </Flex>
                 </ModalHeader>
-
-                <ModalCloseButton color={"#FFFF"} bg={"blackAlpha.400"} />
+                <ModalCloseButton />
             </ModalContent>
         </Modal>
     );

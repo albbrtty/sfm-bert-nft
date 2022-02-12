@@ -19,7 +19,7 @@ import Bg from "../public/bg.jpg";
 import Web3Modal from "web3modal";
 import ethers from "ethers";
 import WalletModal from "../components/WalletModal";
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import { useCallback, useEffect, useState } from "react";
 import { getContract, useContract } from "../src";
@@ -27,6 +27,9 @@ import sfmABI from "../abis/safemoon.json";
 import nftABI from "../abis/nft.json";
 import { BertNFT, IERC20 } from "../typechain";
 import { CopyIcon } from "@chakra-ui/icons";
+export function getLibrary(provider: any) {
+    return new ethers.providers.Web3Provider(provider);
+}
 const Home: NextPage = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { account, library, connector } = useWeb3React<Web3Provider>();
@@ -266,4 +269,10 @@ const Home: NextPage = () => {
     );
 };
 
-export default Home;
+export default () => {
+    return (
+        <Web3ReactProvider getLibrary={getLibrary}>
+            <Home />
+        </Web3ReactProvider>
+    );
+};

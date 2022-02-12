@@ -149,7 +149,7 @@ const WalletModal = ({
     isOpen: boolean;
     onClose: () => void;
 }) => {
-    const context = useWeb3React<Web3Provider>();
+    const context = useWeb3React<any>();
     const {
         connector,
         library,

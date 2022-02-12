@@ -11,16 +11,14 @@ const theme = extendTheme({
         heading: "Gideon Roman",
     },
 });
-export function getLibrary(provider: any) {
-    return new ethers.providers.Web3Provider(provider);
-}
+
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <Web3ReactProvider getLibrary={getLibrary}>
+       
             <ChakraProvider theme={theme}>
                 <Component {...pageProps} />
             </ChakraProvider>
-        </Web3ReactProvider>
+        
     );
 }
 

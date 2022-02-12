@@ -1,10 +1,9 @@
-import { useWeb3React } from "@web3-react/core";
 import { Web3Provider, JsonRpcSigner } from "@ethersproject/providers";
 import { AddressZero } from "@ethersproject/constants";
 import { Contract } from "@ethersproject/contracts";
 import { getAddress, isAddress } from "@ethersproject/address";
 import { useMemo } from "react";
-
+import { walletConnect, hooks } from "../connectors/walletConnect";
 function getSigner(library: Web3Provider, account: string): JsonRpcSigner {
     return library.getSigner(account).connectUnchecked();
 }
@@ -35,7 +34,9 @@ export function useContract<T extends Contract = Contract>(
     ABI: any,
     withSignerIfPossible = true
 ): T | null {
-    const { library, account, chainId } = useWeb3React();
+    const { library, account, chainId } = hooks.useWeb3React(
+        hooks.useProvider()
+    );
 
     return useMemo(() => {
         if (!addressOrAddressMap || !ABI || !library || !chainId) return null;

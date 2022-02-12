@@ -19,7 +19,7 @@ import Bg from "../public/bg.jpg";
 import Web3Modal from "web3modal";
 import ethers from "ethers";
 import WalletModal from "../components/WalletModal";
-import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
+
 import { Web3Provider } from "@ethersproject/providers";
 import { useCallback, useEffect, useState } from "react";
 import { getContract, useContract } from "../src";
@@ -27,14 +27,24 @@ import sfmABI from "../abis/safemoon.json";
 import nftABI from "../abis/nft.json";
 import { BertNFT, IERC20 } from "../typechain";
 import { CopyIcon } from "@chakra-ui/icons";
+import { walletConnect, hooks } from "../connectors/walletConnect";
+import { metaMask, hooks as metamaskHooks } from "../connectors/metamask";
+import { getPriorityConnector, Web3ReactHooks } from "@web3-react/core";
 export function getLibrary(provider: any) {
     return new ethers.providers.Web3Provider(provider);
 }
 const Home: NextPage = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
-    const { account, library, connector } = useWeb3React<Web3Provider>();
-    useEffect(() => {}, [connector, library, account]);
+    const priority = getPriorityConnector(
+        [metaMask, metamaskHooks],
+        [walletConnect, hooks]
+    );
 
+    const { connector, library, account } = priority.usePriorityWeb3React(
+        priority.usePriorityProvider()
+    );
+    useEffect(() => {}, [connector, library, account]);
+    console.log(account);
     const sfm = useContract(
         "0x42981d0bfbAf196529376EE702F2a9Eb9092fcB5",
         sfmABI
@@ -270,9 +280,5 @@ const Home: NextPage = () => {
 };
 
 export default () => {
-    return (
-        <Web3ReactProvider getLibrary={getLibrary}>
-            <Home />
-        </Web3ReactProvider>
-    );
+    return <Home />;
 };

@@ -22,11 +22,18 @@ import {
     WalletConnectConnector,
     UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
 } from "@web3-react/walletconnect-connector";
-import { Web3ReactHooks } from "@web3-react/core";
+import { getPriorityConnector, Web3ReactHooks } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import { hooks, walletConnect } from "../connectors/walletConnect";
 
-const metaMask = await import("../connectors/metamask").then((v) => v.metaMask);
+const { metaMask, metamaskHooks } = await import("../connectors/metamask").then(
+    (v) => {
+        return {
+            metamaskHooks: v.hooks,
+            metaMask: v.metaMask,
+        };
+    }
+);
 
 import { Connector } from "@web3-react/types";
 import dynamic from "next/dynamic";
@@ -50,6 +57,11 @@ const WalletModal = ({
     onClose: () => void;
 }) => {
     const [activeConnector, setActiveConnector] = useState<Connector>();
+    const priority = getPriorityConnector(
+        [metaMask, metamaskHooks],
+        [walletConnect, hooks]
+    );
+    const priorityConnector = priority.usePriorityConnector();
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -84,7 +96,7 @@ const WalletModal = ({
                             bg={"red.600"}
                             _hover={{ bg: "" }}
                             onClick={() => {
-                                activeConnector?.deactivate();
+                                priorityConnector.deactivate();
                                 onClose();
                             }}
                         >

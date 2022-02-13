@@ -1,10 +1,9 @@
 body {
-    background-image: url("/bg.jpg") !important;
-    background-size: cover;
-
     background-color: black !important;
-    background-repeat: no-repeat;
-    
+    background-image: url(/bg.jpg) !important;
+    background-position-y: 90% !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
 }
 
 * {

@@ -26,7 +26,7 @@ export default function handler(
 ) {
     const tokenId = Number(req.query.id);
     res.status(200).json({
-        title: `bertbert-sfm nft`,
+        title: `bertbert-sfm nft #${tokenId}`,
         type: "object",
         properties: {
             name: {
@@ -39,7 +39,7 @@ export default function handler(
             },
             image: {
                 type: "string",
-                description: "",
+                description: `https://sfm-bert-nft.vercel.app/api/nft_img?id=${tokenId}`,
             },
         },
     });

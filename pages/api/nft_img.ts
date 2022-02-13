@@ -6,19 +6,19 @@ type Data = any;
 import fs from "fs";
 import path from "path";
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<Data>
+	req: NextApiRequest,
+	res: NextApiResponse<Data>
 ) {
-    const tokenId = Number(req.query.id);
-    const filePath = path.resolve(".", `./public/imgs/nft${tokenId}.png`);
-    let imageBuffer;
-    try {
-        imageBuffer = fs.readFileSync(filePath);
-    } catch (error) {
-        imageBuffer = fs.readFileSync(
-            path.resolve(".", `./public/imgs/nft1.png`)
-        );
-    }
-    res.setHeader("Content-Type", "image/jpg");
-    res.send(imageBuffer);
+	const tokenId = Number(req.query.id);
+	const filePath = path.resolve(".", `./public/imgs/nft${tokenId}.gif`);
+	let imageBuffer;
+	try {
+		imageBuffer = fs.readFileSync(filePath);
+	} catch (error) {
+		imageBuffer = fs.readFileSync(
+			path.resolve(".", `./public/imgs/nft1.gif`)
+		);
+	}
+	res.setHeader("Content-Type", "image/gif");
+	res.send(imageBuffer);
 }

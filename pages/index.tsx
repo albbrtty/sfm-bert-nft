@@ -36,17 +36,22 @@ import dynamic from "next/dynamic";
 export function getLibrary(provider: any) {
     return new providers.Web3Provider(provider);
 }
+
 const Home: React.FC = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const priority = getPriorityConnector(
         [metaMask, metamaskHooks],
         [walletConnect, hooks]
     );
-
+    const [value, setValue] = useState(0); // integer state
     const { connector, library, account } = priority.usePriorityWeb3React(
         priority.usePriorityProvider()
     );
-    useEffect(() => {}, [connector, library, account]);
+    useEffect(() => {
+        library?.addListener("block", () => {
+            setValue((value) => value + 1);
+        });
+    }, [connector, library, account]);
     const sfm = useContract(
         "0x42981d0bfbAf196529376EE702F2a9Eb9092fcB5",
         sfmABI
@@ -136,7 +141,7 @@ const Home: React.FC = () => {
                 }
             }
         })();
-    }, [account, library, connector, _uu]);
+    }, [account, library, connector, _uu, nft]);
     const [nftSupply, updateSupply] = useState(1);
     const [nftDisplay, updateDisplay] = useState(<></>);
     const [nftBalance, updateBalance] = useState(0);
@@ -147,31 +152,36 @@ const Home: React.FC = () => {
                 totalSupply = v.toNumber();
                 let nfts = new Array();
                 for (let index = 0; index < totalSupply; index++) {
-                    nfts.push(
-                        <Flex
-                            flexDir={"column"}
-                            bg={"blackAlpha.50"}
-                            maxW={"fit-content"}
-                            borderRadius={16}
-                            p={4}
-                            key={index}
-                        >
-                            <Heading fontSize={20}>
-                                SFM NFT #{index + 1}
-                            </Heading>
-                            <Img
-                                mt={2}
-                                alt={`image of nft #${index}`}
-                                bg={"blackAlpha.800"}
-                                p={4}
-                                borderRadius={16}
-                                src={
-                                    "https://sfm-bert-nft.vercel.app/api/nft_img?=" +
-                                    index
-                                }
-                            />
-                        </Flex>
-                    );
+                    nft.ownerOf(index).then((v) => {
+                        console.log(v, account);
+                        if (v == account!) {
+                            nfts.push(
+                                <Flex
+                                    flexDir={"column"}
+                                    bg={"blackAlpha.50"}
+                                    maxW={"fit-content"}
+                                    borderRadius={16}
+                                    p={4}
+                                    key={index}
+                                >
+                                    <Heading fontSize={20}>
+                                        SFM NFT #{index - 1}
+                                    </Heading>
+                                    <Img
+                                        mt={2}
+                                        alt={`image of nft #${index}`}
+                                        bg={"blackAlpha.800"}
+                                        p={4}
+                                        borderRadius={16}
+                                        src={
+                                            "https://sfm-bert-nft.vercel.app/api/nft_img?=" +
+                                            index
+                                        }
+                                    />
+                                </Flex>
+                            );
+                        }
+                    });
                 }
                 console.log(nfts);
                 updateDisplay(<>{nfts}</>);
@@ -182,6 +192,7 @@ const Home: React.FC = () => {
             });
         }
     }, [nft, account]);
+
     return (
         <Flex>
             <WalletModal isOpen={isOpen} onClose={onClose} />

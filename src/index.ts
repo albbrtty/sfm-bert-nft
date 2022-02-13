@@ -4,6 +4,8 @@ import { Contract } from "@ethersproject/contracts";
 import { getAddress, isAddress } from "@ethersproject/address";
 import { useMemo } from "react";
 import { walletConnect, hooks } from "../connectors/walletConnect";
+import { metaMask, hooks as metamaskHooks } from "../connectors/metamask";
+import { getPriorityConnector } from "@web3-react/core";
 function getSigner(library: Web3Provider, account: string): JsonRpcSigner {
     return library.getSigner(account).connectUnchecked();
 }
@@ -34,10 +36,15 @@ export function useContract<T extends Contract = Contract>(
     ABI: any,
     withSignerIfPossible = true
 ): T | null {
-    const { library, account, chainId } = hooks.useWeb3React(
-        hooks.useProvider()
+    const priority = getPriorityConnector(
+        [metaMask, metamaskHooks],
+        [walletConnect, hooks]
     );
 
+    const { library, account, chainId } = priority.usePriorityWeb3React(
+        priority.usePriorityProvider()
+    );
+    console.log(library);
     return useMemo(() => {
         if (!addressOrAddressMap || !ABI || !library || !chainId) return null;
         let address: string | undefined;

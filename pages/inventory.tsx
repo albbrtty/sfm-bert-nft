@@ -55,45 +55,42 @@ const Inventory: React.FC = () => {
 
 								if (v == account) {
 									let thisIndex = index;
+									const Element: React.FC = () => {
+										const [uri, setURI] = useState(
+											"https://sfm-bert-nft.vercel.app/api/nft_img?=" +
+												thisIndex
+										);
+
+										return (
+											<Flex
+												flexDir={"column"}
+												bg={"blackAlpha.50"}
+												maxW={"fit-content"}
+												borderRadius={16}
+												p={4}
+												key={thisIndex}
+											>
+												<Heading fontSize={20}>
+													SFM NFT #{thisIndex}
+												</Heading>
+												<Img
+													mt={2}
+													onMouseEnter={() => {
+														setURI(uri);
+														console.log(uri);
+													}}
+													alt={`image of nft #${thisIndex}`}
+													bg={"blackAlpha.800"}
+													p={4}
+													borderRadius={16}
+													src={uri}
+												/>
+											</Flex>
+										);
+									};
 									nfts.push(
 										createElement(
-											() => {
-												const [uri, setURI] = useState(
-													"https://sfm-bert-nft.vercel.app/api/nft_img?=" +
-														thisIndex
-												);
-
-												return (
-													<Flex
-														flexDir={"column"}
-														bg={"blackAlpha.50"}
-														maxW={"fit-content"}
-														borderRadius={16}
-														p={4}
-														key={thisIndex}
-													>
-														<Heading fontSize={20}>
-															SFM NFT #{thisIndex}
-														</Heading>
-														<Img
-															mt={2}
-															onMouseEnter={() => {
-																setURI(uri);
-																console.log(
-																	uri
-																);
-															}}
-															alt={`image of nft #${thisIndex}`}
-															bg={
-																"blackAlpha.800"
-															}
-															p={4}
-															borderRadius={16}
-															src={uri}
-														/>
-													</Flex>
-												);
-											},
+											Element,
 											{ key: index },
 											{}
 										)

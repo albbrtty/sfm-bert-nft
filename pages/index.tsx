@@ -47,7 +47,6 @@ const Home: React.FC = () => {
         priority.usePriorityProvider()
     );
     useEffect(() => {}, [connector, library, account]);
-    console.log(account);
     const sfm = useContract(
         "0x42981d0bfbAf196529376EE702F2a9Eb9092fcB5",
         sfmABI
@@ -61,14 +60,11 @@ const Home: React.FC = () => {
     const [mint, updateMint] = useState(<></>);
     useEffect(() => {
         (async () => {
+            console.log(sfm);
             if (sfm) {
                 const _allowance = await sfm.allowance(account!, nft!.address);
-                console.log(_allowance.toNumber());
                 if (_allowance.toNumber() < 3100 * 10e8) {
                     await sfm.balanceOf(account!).then((v) => {
-                        console.log(v.toNumber() >= 3100 * 10e8);
-
-                        console.log(v.toNumber());
                         updateAllowance(
                             <>
                                 {v.toNumber() >= 3100 * 10e8 ? (
@@ -158,6 +154,7 @@ const Home: React.FC = () => {
                             maxW={"fit-content"}
                             borderRadius={16}
                             p={4}
+                            key={index}
                         >
                             <Heading fontSize={20}>
                                 SFM NFT #{index + 1}

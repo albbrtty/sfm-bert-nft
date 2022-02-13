@@ -44,7 +44,6 @@ export function useContract<T extends Contract = Contract>(
     const { library, account, chainId } = priority.usePriorityWeb3React(
         priority.usePriorityProvider()
     );
-    console.log(library);
     return useMemo(() => {
         if (!addressOrAddressMap || !ABI || !library || !chainId) return null;
         let address: string | undefined;

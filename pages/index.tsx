@@ -31,7 +31,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getContract, useContract } from "../src";
 import sfmABI from "../abis/safemoon.json";
 import nftABI from "../abis/nft.json";
-import { BertNFT, IERC20 } from "../typechain";
+import { BertNFT } from "../typechain/BertNFT";
+import { IERC20 } from "../typechain/IERC20";
 import { CopyIcon } from "@chakra-ui/icons";
 import { walletConnect, hooks } from "../connectors/walletConnect";
 import { metaMask, hooks as metamaskHooks } from "../connectors/metamask";
@@ -50,12 +51,13 @@ const Home: React.FC = () => {
 	);
 
 	const [value, setValue] = useState(0); // integer state
-	const [connector, library, account] = [
+	const [connector, library, account, isActive] = [
 		priority.usePriorityConnector(),
 		priority.usePriorityProvider(),
 		priority.usePriorityAccount(),
+		priority.usePriorityIsActive(),
 	];
-	const isActive = priority.usePriorityIsActive();
+
 	console.log(isActive, account);
 	useEffect(() => {
 		library?.removeAllListeners();
@@ -158,7 +160,7 @@ const Home: React.FC = () => {
 				}
 			}
 		})();
-	}, [account, library, connector, _uu, nft]);
+	}, [account, library, connector, _uu, nft, isActive]);
 	// const [nftSupply, updateSupply] = useState(1);
 	// const [nftDisplay, updateDisplay] = useState(<></>);
 	// const [nftBalance, updateBalance] = useState(0);

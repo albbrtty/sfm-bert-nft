@@ -81,10 +81,8 @@ const WalletModal = ({
 									loadingText={"Connecting"}
 									onClick={() => {
 										(async () => {
-											currentConnector.activate();
-										})().then(() => {
-											location.reload();
-										});
+											await currentConnector.activate();
+										})().then(() => {});
 
 										setActiveConnector(currentConnector);
 										onClose();
